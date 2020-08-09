@@ -1,5 +1,6 @@
 @echo off
-set call_function=call "call_function.cmd"
+setlocal EnableDelayedExpansion
+call imports.cmd
 
 :loop
     %call_function% get_key.cmd key_pressed
