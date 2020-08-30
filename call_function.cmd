@@ -1,5 +1,5 @@
 set /A level=%level%+1
-set function_%level%=%1
+set function_%level%=%~1
 set result_name_%level%=%2
 
 set res_%level%=NONE
