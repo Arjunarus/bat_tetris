@@ -11,34 +11,12 @@ if "%mirr%" == "R" %call_function% "rand 0 1" mirr
 if "%rotate%" == "R" %call_function% "rand 0 3" rotate
 
 set _fig=UNKNOWN
-if shape==L (
-:: 10
-:: 10
-:: 11
-    set _fig=23101011
-)
-if shape==S (
-:: 011
-:: 110
-    set _fig=32011110
-)
-if shape==I (
-:: 1
-:: 1
-:: 1
-:: 1
-    set _fig=141111
-)
-if shape==O (
-:: 11
-:: 11
-    set _fig=221111
-)
-if shape==T (
-:: 111
-:: 010
-    set _fig=32111010
-)
+:: Shapes: width, height, points
+if shape==L set _fig=23101011
+if shape==S set _fig=32011110
+if shape==I set _fig=141111
+if shape==O set _fig=221111
+if shape==T set _fig=32111010
 
 if %mirr%==1 %call_function% "mirror %_fig%" _fig
 if %rotate% GTR 0 %call_function% "rotate %_fig% %rotate%" _fig
