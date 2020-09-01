@@ -1,5 +1,3 @@
-setlocal EnableDelayedExpansion
-
 set fig=%1
 
 set width=%fig:~0,1%
@@ -12,6 +10,4 @@ for /l %%h in (1,1,%height%) do (
         call set _m_fig=!_m_fig!%%fig:~!_x!,1%%
     )
 )
-
-        ::set _m_fig=!_m_fig!!fig:~!_x!,1!
 echo %_m_fig%
