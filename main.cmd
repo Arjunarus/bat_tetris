@@ -19,14 +19,15 @@ set cup_height=10
     set fig_y=0
 
     :fall_loop
-        %call_function% "fill_cup %cup% %cur_fig% %fig_x% %fig_y%" filled_cup
-        call render.cmd %filled_cup% %next_fig%
+        %call_function% "put_in_cup %cup% %cur_fig% %fig_x% %fig_y%" put_cup
+        call render.cmd %put_cup% %next_fig%
     
         set dx=0
         set dy=0
+        set dr=0
         %call_function% "get_key swadq" key_pressed
         if "%key_pressed%"=="Q" exit /b 0
-        if "%key_pressed%"=="W" %call_function% "rotate %cur_fig% 1" cur_fig
+        if "%key_pressed%"=="W" set dr=1
         if "%key_pressed%"=="A" set dx=-1
         if "%key_pressed%"=="S" set dy=1
         if "%key_pressed%"=="D" set dx=1
@@ -39,6 +40,7 @@ set cup_height=10
         :: elif dy != 0 cup=new_cup; break
         :: else dx=0
         
+        %call_function% "rotate %cur_fig% %dr%" cur_fig
         set /a "fig_x=%fig_x% + (%dx%)"
         set /a fig_y=%fig_y% + %dy%
         
