@@ -4,28 +4,24 @@ call imports.cmd
 
 echo Initializing...
 
-::::::::::::::::::::::::::::::::::::::::
+::::::: Constants ::::::::::::::::::::::
 set CUP_WIDTH=10
 set CUP_HEIGHT=10
 set /a MAX_DX=CUP_WIDTH/3
 ::::::::::::::::::::::::::::::::::::::::
 
 %call_function% "cup_ctor %CUP_WIDTH% %CUP_HEIGHT%" put_cup
-%call_function% "fig_ctor 1 0 0" next_fig
+call fig_ctor.cmd next_fig
 set score=0
 
 :main_loop
     set cup=%put_cup%
     set cur_fig=%next_fig%
-    
-    call rand.cmd 1 5 shape
-    call rand.cmd 0 1 mirr
-    call rand.cmd 0 3 rotate
-    %call_function% "fig_ctor %shape% %mirr% %rotate%" next_fig
+    call fig_ctor next_fig
     
     set /a fig_x=(%CUP_WIDTH%/2)-2
     set fig_y=0
-    %call_function% "put_in_cup %cup% %cur_fig% %fig_x% %fig_y%" put_cup
+    call put_in_cup.cmd %cup% %cur_fig% %fig_x% %fig_y% put_cup
     set mdx=0
 
     :fall_loop
@@ -37,7 +33,7 @@ set score=0
         if "%key_pressed%"=="A" set dx=-1
         if "%key_pressed%"=="S" set dy=1
         if "%key_pressed%"=="D" set dx=1
-        if "%key_pressed%"=="W" %call_function% "rotate %cur_fig% 1" rotated
+        if "%key_pressed%"=="W" call rotate.cmd %cur_fig% 1 rotated
         if "%key_pressed%"=="Q" exit /b 0
         
         set abs_dx=%dx:~-1%
@@ -47,7 +43,7 @@ set score=0
         set /a "new_fig_x=%fig_x% + (%dx%)"
         set /a "new_fig_y=%fig_y% + (%dy%)"
         
-        %call_function% "put_in_cup %cup% %rotated% %new_fig_x% %new_fig_y%" new_put_cup
+        call put_in_cup.cmd %cup% %rotated% %new_fig_x% %new_fig_y% new_put_cup
         
         set _new_put_cup=%new_put_cup:~4%
 

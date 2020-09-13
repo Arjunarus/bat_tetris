@@ -1,10 +1,11 @@
 :: Strange bug, need echo off to fix
 @echo off
-
+setlocal
 set cup=%1
 set fig=%2
 set fig_x=%3
 set fig_y=%4
+set res=%5
 
 set cup_width=%cup:~0,2%
 set cup_height=%cup:~2,2%
@@ -32,7 +33,7 @@ for /l %%i in (1,1,%fig_height%) do (
     set cup=!str_before!!str_union!!str_after!
 )
 
-echo %cup%
+endlocal & set %5=%cup%
 
 exit /b 0
 
