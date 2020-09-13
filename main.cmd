@@ -5,11 +5,12 @@ call imports.cmd
 echo Initializing...
 
 ::::::::::::::::::::::::::::::::::::::::
-set cup_width=10
-set cup_height=10
+set CUP_WIDTH=10
+set CUP_HEIGHT=10
+set /a MAX_DX=CUP_WIDTH/3
 ::::::::::::::::::::::::::::::::::::::::
 
-%call_function% "cup_ctor %cup_width% %cup_height%" put_cup
+%call_function% "cup_ctor %CUP_WIDTH% %CUP_HEIGHT%" put_cup
 %call_function% "fig_ctor 1 0 0" next_fig
 
 :main_loop
@@ -21,22 +22,26 @@ set cup_height=10
     call rand.cmd 0 3 rotate
     %call_function% "fig_ctor %shape% %mirr% %rotate%" next_fig
     
-    set /a fig_x=(%cup_width%/2)-2
+    set /a fig_x=(%CUP_WIDTH%/2)-2
     set fig_y=0
-    
     %call_function% "put_in_cup %cup% %cur_fig% %fig_x% %fig_y%" put_cup
+    set mdx=0
 
     :fall_loop
         call render.cmd %put_cup% %next_fig%
         
-        set rotated=%cur_fig%
         set /a dx=0, dy=0
+        set rotated=%cur_fig%
         %call_function% "get_key swadq" key_pressed
-        if "%key_pressed%"=="Q" exit /b 0
-        if "%key_pressed%"=="W" %call_function% "rotate %cur_fig% 1" rotated
         if "%key_pressed%"=="A" set dx=-1
         if "%key_pressed%"=="S" set dy=1
         if "%key_pressed%"=="D" set dx=1
+        if "%key_pressed%"=="W" %call_function% "rotate %cur_fig% 1" rotated
+        if "%key_pressed%"=="Q" exit /b 0
+        
+        REM set abs_dx=
+        set /a mdx=%mdx%*%dx:~-1%+%dx:~-1%
+        if %mdx% GTR %MAX_DX% set /a mdx=0, dx=0, dy=1
         
         set /a "new_fig_x=%fig_x% + (%dx%)"
         set /a "new_fig_y=%fig_y% + (%dy%)"
@@ -51,9 +56,19 @@ set cup_height=10
             set fig_y=%new_fig_y%
             set cur_fig=%rotated%
             set put_cup=%new_put_cup%
-        ) else if %dy% GTR 0 goto :main_loop
+        ) else if %dy% GTR 0 goto :break
                 
     goto :fall_loop
+
+    :break
+    if %fig_y% EQU 0 goto :gameover
+    
+goto :main_loop
+
+:gameover
+echo ============================
+echo          GAME OVER
+echo ============================
 
 exit /b 0
 
