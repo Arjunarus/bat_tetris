@@ -10,12 +10,17 @@ set cup_height=10
 ::::::::::::::::::::::::::::::::::::::::
 
 %call_function% "cup_ctor %cup_width% %cup_height%" put_cup
-%call_function% "fig_ctor R R R" next_fig
+%call_function% "fig_ctor 1 0 0" next_fig
 
 :main_loop
     set cup=%put_cup%
     set cur_fig=%next_fig%
-    %call_function% "fig_ctor R R R" next_fig
+    
+    call rand.cmd 1 5 shape
+    call rand.cmd 0 1 mirr
+    call rand.cmd 0 3 rotate
+    %call_function% "fig_ctor %shape% %mirr% %rotate%" next_fig
+    
     set /a fig_x=(%cup_width%/2)-2
     set fig_y=0
     
@@ -46,9 +51,16 @@ set cup_height=10
             set fig_y=%new_fig_y%
             set cur_fig=%rotated%
             set put_cup=%new_put_cup%
-        ) else if %new_fig_y% NEQ %fig_y% goto :main_loop
+        ) else if %dy% GTR 0 goto :main_loop
                 
     goto :fall_loop
+
+exit /b 0
+
+:rand
+set /a from=%1
+set /a to=%2
+set /a "%3=%random%*(%to%-%from%)/32768+%from%"
 
 REM generate cup
 REM loop:
