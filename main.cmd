@@ -12,6 +12,7 @@ set /a MAX_DX=CUP_WIDTH/3
 
 %call_function% "cup_ctor %CUP_WIDTH% %CUP_HEIGHT%" put_cup
 %call_function% "fig_ctor 1 0 0" next_fig
+set score=0
 
 :main_loop
     set cup=%put_cup%
@@ -28,7 +29,7 @@ set /a MAX_DX=CUP_WIDTH/3
     set mdx=0
 
     :fall_loop
-        call render.cmd %put_cup% %next_fig%
+        call render.cmd %put_cup% %next_fig% %score%
         
         set /a dx=0, dy=0
         set rotated=%cur_fig%
@@ -39,8 +40,8 @@ set /a MAX_DX=CUP_WIDTH/3
         if "%key_pressed%"=="W" %call_function% "rotate %cur_fig% 1" rotated
         if "%key_pressed%"=="Q" exit /b 0
         
-        REM set abs_dx=
-        set /a mdx=%mdx%*%dx:~-1%+%dx:~-1%
+        set abs_dx=%dx:~-1%
+        set /a mdx=%mdx%*%abs_dx%+%abs_dx%
         if %mdx% GTR %MAX_DX% set /a mdx=0, dx=0, dy=1
         
         set /a "new_fig_x=%fig_x% + (%dx%)"
@@ -63,6 +64,9 @@ set /a MAX_DX=CUP_WIDTH/3
     :break
     if %fig_y% EQU 0 goto :gameover
     
+    call remove_full_lines.cmd %put_cup% put_cup lines
+    if %lines% GTR 0 set /a "score+=(2*lines-1)*100"
+    
 goto :main_loop
 
 :gameover
@@ -71,18 +75,3 @@ echo          GAME OVER
 echo ============================
 
 exit /b 0
-
-:rand
-set /a from=%1
-set /a to=%2
-set /a "%3=%random%*(%to%-%from%)/32768+%from%"
-
-REM generate cup
-REM loop:
-    REM generate figure
-    
-    REM loop:
-        REM get key
-        REM move figure
-        REM if bottom break
-    REM remove full lines

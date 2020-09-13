@@ -1,5 +1,6 @@
 set _cup=%1
 set _next_fig=%2
+set score=%3
 
 set _cup_width=%_cup:~0,2%
 set _cup_height=%_cup:~2,2%
@@ -28,7 +29,7 @@ for /l %%i in (1,1,%_cup_height%) do (
 
 :: Render next fig
 echo.
-echo NEXT:
+echo NEXT
 echo.
 for /l %%i in (1,1,%_fig_height%) do (
     set /a "d=2 + %_fig_width%*(%%i-1)"
@@ -36,11 +37,12 @@ for /l %%i in (1,1,%_fig_height%) do (
 )
 
 :: Render score
-:: TODO
+echo.
+echo SCORE: %score%
 
 :: Render help
 echo.
-echo Control: 
+echo Control
 echo -----------------------------------------------------------
 echo ^| W - rotate ^| A - left ^| S - down ^| D - right ^| Q - exit ^|
 echo -----------------------------------------------------------
